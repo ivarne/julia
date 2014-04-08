@@ -115,7 +115,7 @@ function Pipe()
     try
         ret = Pipe(handle)
         associate_julia_struct(ret.handle,ret)
-        finalizer(ret,uvfinalize)
+        finalizer(uvfinalize, ret)
         return init_pipe!(ret;readable=true)
     catch
         c_free(handle)
@@ -153,7 +153,7 @@ function PipeServer()
     try
         ret = PipeServer(handle)
         associate_julia_struct(ret.handle,ret)
-        finalizer(ret,uvfinalize)
+        finalizer(uvfinalize, ret)
         return init_pipe!(ret;readable=true)
     catch
         c_free(handle)
@@ -188,7 +188,7 @@ function TTY(fd::RawFD; readable::Bool = false)
     handle = c_malloc(_sizeof_uv_tty)
     ret = TTY(handle)
     associate_julia_struct(handle,ret)
-    finalizer(ret,uvfinalize)
+    finalizer(uvfinalize, ret)
     # This needs to go after associate_julia_struct so that there 
     # is no garbage in the ->data field
     uv_error("TTY",ccall(:uv_tty_init,Int32,(Ptr{Void},Ptr{Void},Int32,Int32),eventloop(),handle,fd.fd,readable))
@@ -241,7 +241,7 @@ function init_stdio(handle)
         ret.status = StatusOpen
         ret.line_buffered = false  
         associate_julia_struct(ret.handle,ret)
-        finalizer(ret,uvfinalize)
+        finalizer(uvfinalize, ret)
         return ret
     end
 end
@@ -430,7 +430,7 @@ type Timer <: AsyncWork
             this.handle = C_NULL
             error(UVError("uv_make_timer",err))
         end
-        finalizer(this,uvfinalize)
+        finalizer(uvfinalize, this)
         this
     end
 end
@@ -520,7 +520,7 @@ end
 function malloc_julia_pipe(x) 
     x.handle = c_malloc(_sizeof_uv_named_pipe)
     associate_julia_struct(x.handle,x)
-    finalizer(x,uvfinalize)
+    finalizer(uvfinalize, x)
 end
 
 _link_pipe(read_end::Ptr{Void},write_end::Ptr{Void}) = uv_error("pipe_link",ccall(:uv_pipe_link, Int32, (Ptr{Void}, Ptr{Void}), read_end, write_end))

@@ -512,7 +512,7 @@ function setup_interface(d::REPLDisplay, req, rep; extra_repl_keymap = Dict{Any,
                                           uint8('>') => main_prompt])
     if !repl.no_history_file
         f = open(find_hist_file(), true, true, true, false, false)
-        finalizer(replc, replc->close(f))
+        finalizer(replc->close(f), replc)
         hist_from_file(hp, f)
     end
     history_reset_state(hp)

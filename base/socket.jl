@@ -262,7 +262,7 @@ end
 function TcpSocket()
     this = TcpSocket(c_malloc(_sizeof_uv_tcp))
     associate_julia_struct(this.handle,this)
-    finalizer(this,uvfinalize)
+    finalizer(uvfinalize, this)
     err = ccall(:uv_tcp_init,Cint,(Ptr{Void},Ptr{Void}),
                   eventloop(),this.handle)
     if err != 0 
@@ -290,7 +290,7 @@ end
 function TcpServer()
     this = TcpServer(c_malloc(_sizeof_uv_tcp))
     associate_julia_struct(this.handle, this)
-    finalizer(this,uvfinalize)
+    finalizer(uvfinalize, this)
     err = ccall(:uv_tcp_init,Cint,(Ptr{Void},Ptr{Void}),
                   eventloop(),this.handle)
     if err != 0 

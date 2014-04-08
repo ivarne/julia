@@ -400,7 +400,7 @@ type RemoteRef
             return found
         end
         client_refs[r] = true
-        finalizer(r, send_del_client)
+        finalizer(send_del_client, r)
         r
     end
 
@@ -1042,7 +1042,7 @@ function create_worker(privhost, port, pubhost, stream, config, manage)
     end
 
     # install a finalizer to perform cleanup if necessary
-    finalizer(w, (w)->if myid() == 1 w.manage(w.id, w.config, :finalize) end)
+    finalizer((w)->if myid() == 1 w.manage(w.id, w.config, :finalize) end, w)
 
     w
 end

@@ -17,11 +17,10 @@ type Regex
             error("invalid regex options: $options")
         end
         re = compile(new(pattern, options, C_NULL, C_NULL))
-        finalizer(re,
-            function(re::Regex)
+        finalizer(re) do re
                 re.extra != C_NULL && PCRE.free_study(re.extra)
                 re.regex != C_NULL && PCRE.free(re.regex)
-            end)
+            end
         re
     end
 end

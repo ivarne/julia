@@ -441,6 +441,10 @@ Set{T<:Number}(xs::T...) = Set{T}(xs)
 @deprecate infs(dims...)                 fill(Inf, dims)
 @deprecate infs{T}(x::AbstractArray{T})  fill(convert(T,Inf), size(x))
 
+finalizer(a,b) = error("Invalid arguments for finalizer")
+@deprecate finalizer(o, f::Union(Function,Ptr)) finalizer(f,o)
+
+
 # 0.3 discontinued functions
 
 function nnz(X)

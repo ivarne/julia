@@ -107,7 +107,7 @@ function mmap_array{T,N,TInt<:Integer}(::Type{T}, dims::NTuple{N,TInt}, s::IO, o
         pmap, delta = mmap(len, prot, flags, fd(s), offset)
     end
     A = pointer_to_array(pointer(T, uint(pmap)+delta), dims)
-    finalizer(A,x->munmap(pmap,len+delta))
+    finalizer(x->munmap(pmap,len+delta), A)
     return A
 end
 
@@ -139,7 +139,7 @@ function mmap_array{T,N,TInt<:Integer}(::Type{T}, dims::NTuple{N,TInt}, s::IO, o
         error("could not create mapping view")
     end
     A = pointer_to_array(pointer(T, viewhandle), dims)
-    finalizer(A, x->munmap(viewhandle, mmaphandle))
+    finalizer(x->munmap(viewhandle, mmaphandle), A)
     return A
 end
 
