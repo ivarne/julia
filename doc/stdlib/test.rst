@@ -11,9 +11,10 @@ provided by the user by using the :func:`registerhandler` function.
 Overview
 ________
 
-To use the default handler, the macro :func:`@test` can be used directly::
+To use the default handler, the macro :func:`@test` can be used directly
 
-  # Julia code
+.. doctest::
+
   julia> @test 1 == 1
 
   julia> @test 1 == 0
@@ -31,22 +32,28 @@ To use the default handler, the macro :func:`@test` can be used directly::
 As seen in the examples above, failures or errors will print the abstract
 syntax tree of the expression in question.
 
-Another macro is provided to check if the given expression throws an error,
-:func:`@test_throws`::
+Another macro is provided to check if the given expression throws an error, of some specified type
+:func:`@test_throws`
 
-  julia> @test_throws error("An error")
+.. doctest::
 
-  julia> @test_throws 1 == 1
-  ERROR: test failed: :((1==1))
-   in default_handler at test.jl:20
-   in do_test_throws at test.jl:46
+  julia> @test_throws ErrorException error("An error")
 
-  julia> @test_throws 1 != 1
-  ERROR: test failed: :((1!=1))
-   in default_handler at test.jl:20
-   in do_test_throws at test.jl:46
+  julia> @test_throws ErrorException sqrt(-1.)
+  ERROR: DomainError
+   in sqrt at math.jl:293
+   in anonymous at test.jl:75
+   in do_test_throws at test.jl:45
 
-As floating point comparisons can be imprecise, two additional macros exist taking in account small numerical errors::
+  julia> @test_throws DomainError sqrt(complex(-1.))
+  ERROR: test failed: sqrt(complex(-1.0))
+   in error at error.jl:21
+   in default_handler at test.jl:19
+   in do_test_throws at test.jl:55
+
+As floating point comparisons can be imprecise, two additional macros exist taking in account small numerical errors
+
+.. doctest::
 
   julia> @test_approx_eq 1. 0.999999999
   ERROR: assertion failed: |1.0 - 0.999999999| < 2.220446049250313e-12
@@ -77,7 +84,9 @@ A handler is a function defined for three kinds of arguments: ``Success``, ``Fai
   default_handler(r::Failure) = error("test failed: $(r.expr)")
   default_handler(r::Error)   = rethrow(r)
 
-A different handler can be used for a block (with :func:`with_handler`)::
+A different handler can be used for a block (with :func:`with_handler`)
+
+.. doctest::
 
   julia> using Base.Test
 
