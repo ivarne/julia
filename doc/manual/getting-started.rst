@@ -13,6 +13,7 @@ The easiest way to learn and experiment with Julia is by starting an
 interactive session (also known as a read-eval-print loop or "repl")::
 
     $ julia
+
                    _
        _       _ _(_)_     |  A fresh approach to technical computing.
       (_)     | (_) (_)    |  Documentation: http://docs.julialang.org
