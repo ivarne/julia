@@ -36,15 +36,15 @@ macro deprecate(old,new)
 end
 
 function depwarn(msg, funcsym)
+    # don't warn about deprecations if --no-depwarn is specified
+    compileropts().no_depwarn == 0 && return
     bt = backtrace()
     caller = firstcaller(bt, funcsym)
     warn(msg, once=(caller!=C_NULL), key=caller, bt=bt)
 end
 
-shouldwarn() = (opts = compileropts(); bool(opts.depwarn))
 
 function firstcaller(bt::Array{Ptr{Void},1}, funcsym::Symbol)
-    !shouldwarn() && return C_NULL
     # Identify the calling line
     i = 1
     while i <= length(bt)
