@@ -135,7 +135,8 @@ ambiguity in parsing.:
     :(::)
 
 :obj:`Symbol`\ s can also be created using :func:`symbol`, which takes
-a character or string as its argument:
+a character or string as its argument, and they can be concatenated in the same
+manner as strings using the ``*`` operator:
 
 .. doctest::
 
@@ -144,6 +145,9 @@ a character or string as its argument:
 
     julia> symbol("'")
     :'
+
+    julia> :x * :y
+    :xy
 
 :func:`eval` and Interpolation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

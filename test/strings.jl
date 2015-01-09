@@ -1019,6 +1019,8 @@ let
 end
 
 @test symbol("asdf") === :asdf
+@test symbol("qaz") * symbol("wsx") === :qazwsx
+
 @test startswith(string(gensym("asdf")),"##asdf#")
 @test gensym("asdf") != gensym("asdf")
 @test gensym() != gensym()

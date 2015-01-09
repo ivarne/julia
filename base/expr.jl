@@ -6,6 +6,13 @@ symbol(s::UTF8String) = symbol(s.data)
 symbol(a::Array{UInt8,1}) =
     ccall(:jl_symbol_n, Any, (Ptr{UInt8}, Int32), a, length(a))::Symbol
 symbol(x::Char) = symbol(string(x))
+*(x::Symbol, y::Symbol) = begin
+    px = convert(Ptr{Uint8}, x); py = convert(Ptr{Uint8}, y)
+    symbol([
+        pointer_to_array(px, ccall(:strlen, Csize_t, (Ptr{Uint8},), px)),
+        pointer_to_array(py, ccall(:strlen, Csize_t, (Ptr{Uint8},), py))
+    ])
+end
 
 gensym() = ccall(:jl_gensym, Any, ())::Symbol
 
